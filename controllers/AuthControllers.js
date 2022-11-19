@@ -5,15 +5,25 @@ module.exports.Register = async function (req, res) {
 
   try {
     let query = {
-      text: "INSERT INTO public.user (name, email) VALUES($1, $2) RETURNING *",
-      values: ["Arun", "arunkumar413@gmail.com"],
+      text: "INSERT INTO public.user (name, email,isEmailVerified) VALUES($1, $2,$3) RETURNING *",
+      values: ["Arun", "arunkumar413@gmail.hin", 1],
     };
 
-    let res = await client.query(query);
-    console.log(res.rows);
-    res.send("register");
+    let dbres = await client.query(query);
+
+    //generate session id and set it to cookie value
+    // send verification email
+    //
+
+    console.log(dbres.rows);
+    res.cookie("rememberme", "1", {
+      expires: new Date(Date.now() + 900000),
+      httpOnly: true,
+    });
+    res.status(201).json({ status: "Successfully registered" });
   } catch (err) {
     console.log(err);
+    res.send(err);
   } finally {
     client.release();
   }
