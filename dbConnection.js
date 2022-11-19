@@ -16,4 +16,17 @@ module.exports.pool = new Pool({
   database: "codeGround",
   password: "postgres",
   port: 5432,
+  max: 20,
 });
+
+async function poolConnect() {
+  const client = await pool.connect();
+
+  try {
+    let res = await client.query("SELECT NOW()");
+  } catch (err) {
+    console.log(err);
+  } finally {
+    client.release();
+  }
+}
