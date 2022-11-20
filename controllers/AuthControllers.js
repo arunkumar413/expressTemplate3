@@ -13,7 +13,7 @@ module.exports.Register = async function (req, res) {
   try {
     let query = {
       text: "INSERT INTO public.user (first_name,last_name, email,password,isemailverified) VALUES($1, $2,$3,$4,$5) RETURNING *",
-      values: ["Arun Kumar", "Kadari", "arunkumar413@gmail.k", hash, false],
+      values: ["Arun Kumar", "Kadari", "arunkumar413@gmail.l", hash, false],
     };
 
     let dbres = await client.query(query);
@@ -25,7 +25,7 @@ module.exports.Register = async function (req, res) {
 
     let sessionQuery = {
       text: "INSERT INTO public.session (email,userid,sessionid) VALUES ($1,$2,$3) returning *",
-      values: ["arunkumar413@gmail.k", currentUserId, sessionID],
+      values: ["arunkumar413@gmail.l", currentUserId, sessionID],
     };
 
     let sessionResult = await client.query(sessionQuery);
