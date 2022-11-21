@@ -13,7 +13,13 @@ module.exports.Register = async function (req, res) {
   try {
     let query = {
       text: "INSERT INTO public.user (first_name,last_name, email,password,isemailverified) VALUES($1, $2,$3,$4,$5) RETURNING *",
-      values: ["Arun Kumar", "Kadari", "arunkumar413@gmail.l", hash, false],
+      values: [
+        req.body.firstName,
+        req.body.lastName,
+        req.body.email,
+        hash,
+        false,
+      ],
     };
 
     let dbres = await client.query(query);
@@ -57,7 +63,6 @@ module.exports.Login = async function (req, res) {
       req.body.password,
       queryRes.rows[0].password
     );
-    console.log(compareRes);
     if (compareRes === true) {
       let sessionID = uuidv4();
 
