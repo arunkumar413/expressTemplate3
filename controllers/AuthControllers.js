@@ -49,6 +49,8 @@ module.exports.Register = async function (req, res) {
 };
 
 module.exports.Login = async function (req, res) {
+  console.log("############ Login ###############");
+  console.log(req.body);
   const client = await pool.connect();
   userInfo = req.body;
   let query = {
