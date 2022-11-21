@@ -1,5 +1,5 @@
 var express = require("express");
-const { Register } = require("../controllers/AuthControllers");
+const { Register, Logout } = require("../controllers/AuthControllers");
 var router = express.Router();
 
 const { pool } = require("../dbConnection");
@@ -26,5 +26,6 @@ router.get("/", async function (req, res, next) {
 });
 
 router.get("/register", Register);
+router.get("/logout", Logout);
 
 module.exports = router;

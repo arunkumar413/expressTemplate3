@@ -41,3 +41,19 @@ module.exports.Register = async function (req, res) {
     client.release();
   }
 };
+
+module.exports.Logout = async function (req, res) {
+  const client = await pool.connect();
+
+  let query = {
+    text: "DELETE FROM public.session WHERE email=$1",
+    values: ["arunkumar413@gmail.j"],
+  };
+  try {
+    let delResult = await client.query(query);
+    console.log(delResult);
+    res.status(200).json({ status: "successfully logged out" });
+  } catch (err) {
+    console.log(err);
+  }
+};
