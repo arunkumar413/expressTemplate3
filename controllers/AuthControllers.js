@@ -42,12 +42,52 @@ module.exports.Register = async function (req, res) {
   }
 };
 
+module.exports.Login = async function (req, res) {
+  const client = await pool.connect();
+  userInfo = req.body;
+  let query = {
+    text: "SELECT * FROM PUBLIC.USER WHERE EMAIL=$1",
+    values: [req.body.email],
+  };
+
+  try {
+    let queryRes = await client.query(query);
+    console.log(queryRes.rows[0]);
+    let compareRes = await bcrypt.compare(
+      req.body.password,
+      queryRes.rows[0].password
+    );
+    console.log(compareRes);
+    if (compareRes === true) {
+      let sessionID = uuidv4();
+
+      let sessionQuery = {
+        text: "INSERT INTO public.session (email,userid,sessionid) VALUES ($1,$2,$3) returning *",
+        values: [queryRes.rows[0].email, queryRes.rows[0].id, sessionID],
+      };
+
+      let sessionResult = await client.query(sessionQuery);
+      res.cookie("sessionid", sessionResult.rows[0].sessionid, {
+        expires: new Date(Date.now() + 900000),
+        httpOnly: true,
+      });
+      res.status(200).json({ status: "login success" });
+    } else {
+      res.status(401).json({ status: "incorrect password" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  // console.log(req.body);
+};
+
 module.exports.Logout = async function (req, res) {
   const client = await pool.connect();
 
   let query = {
     text: "DELETE FROM public.session WHERE email=$1",
-    values: ["arunkumar413@gmail.j"],
+    values: [req.body.email],
   };
   try {
     let delResult = await client.query(query);
