@@ -27,6 +27,6 @@ router.get("/", async function (req, res, next) {
 
 router.get("/register", Register);
 router.get("/logout", Logout);
-router.get("/login", Login);
+router.post("/login", Login);
 
 module.exports = router;

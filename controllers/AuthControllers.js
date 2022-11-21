@@ -31,7 +31,7 @@ module.exports.Register = async function (req, res) {
 
     let sessionQuery = {
       text: "INSERT INTO public.session (email,userid,sessionid) VALUES ($1,$2,$3) returning *",
-      values: ["arunkumar413@gmail.l", currentUserId, sessionID],
+      values: [dbres.rows[0].email, currentUserId, sessionID],
     };
 
     let sessionResult = await client.query(sessionQuery);
