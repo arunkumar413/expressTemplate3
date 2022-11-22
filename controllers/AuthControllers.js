@@ -78,7 +78,11 @@ module.exports.Login = async function (req, res) {
         expires: new Date(Date.now() + 900000),
         httpOnly: true,
       });
-      res.status(200).json({ status: "login success" });
+      res.status(200).json({
+        status: "login success",
+        sessionID: sessionResult.rows[0].sessionid,
+        email: sessionResult.rows[0].email,
+      });
     } else {
       res.status(401).json({ status: "incorrect password" });
     }
@@ -90,6 +94,8 @@ module.exports.Login = async function (req, res) {
 };
 
 module.exports.Logout = async function (req, res) {
+  console.log("############# Logout ################");
+  console.log(req.body);
   const client = await pool.connect();
 
   let query = {
